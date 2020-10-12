@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool isCyclic(int s, map<int, vector<int>> adj, bool visited[], bool recursive[])
+{
+	if(visited[s]==false)
+	{
+		visited[s]=true;
+		recursive[s]=true;
+		for(int y: adj[s])
+		{
+			if(!visited[y]&&isCyclic(y,adj,visited, recursive))
+			return true;
+			else if(recursive[y])
+			return true;
+		}
+	}
+	recursive[s]=false;
+	return false;
+}
+int main()
+{
+	int N,E;
+	cin>>N>>E;
+	bool visited[N], recursive[N];
+	memset(visited, false, sizeof(visited));
+	memset(recursive, false, sizeof(visited));
+	map<int, vector<int>> adj;
+	for(int i=0; i<E; i++)
+	{
+		int u,v;
+		cin>>u>>v;
+		adj[u].push_back(v);
+	}
+	bool flag=true;
+	for(int i=0; i<N; i++)
+	{
+		if(isCyclic(i, adj, visited, recursive))
+		{
+			cout<<"YES"<<endl;
+			flag=false;
+			break;
+		}
+	}
+	if(flag)
+	cout<<"NO"<<endl;
+	return 0;
+}
